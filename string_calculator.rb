@@ -19,23 +19,18 @@ class StringCalculator
   end
 
   def extract_delimiter(string)
-    if string.start_with?('//')
-      if string.include?('[') && string.include?(']')
-        delimiters = string.scan(/\[(.*?)\]/).flatten
-        return delimiters
-      else
-        delimiter_start = string.index('//') + 2
-        delimiter_end = string.index('\n') - 1
-        return [string[delimiter_start..delimiter_end]]
-      end
+    return ',' unless string.start_with?('//')
+
+    if string.include?('[') && string.include?(']')
+      delimiters = string.scan(/\[([^\[\]]+)\]/).flatten
+      Regexp.union(delimiters)
     else
-      [',']
+      string[2]
     end
   end
 
-  def extract_numbers(string, delimiters)
-    delimiter_pattern = delimiters.map { |delimiter| Regexp.escape(delimiter) }.join('|')
-    string.split(/#{delimiter_pattern}|\n/)
+  def extract_numbers(string, delimiter)
+    string.split(/#{delimiter}|\n/)
   end
 
   def sanitize_numbers(numbers)
