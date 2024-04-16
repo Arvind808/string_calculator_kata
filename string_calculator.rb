@@ -1,6 +1,9 @@
 class StringCalculator
 
   def add(string)
+    negatives = find_negatives(string)
+    raise ArgumentError, "negatives not allowed: #{negatives.join(', ')}" unless negatives.empty?
+
     return 0 if string.empty?
 
     delimiter = extract_delimiter(string)
@@ -9,6 +12,11 @@ class StringCalculator
   end
 
   private
+
+  def find_negatives(string)
+    negatives = string.scan(/-\d+/)
+    negatives.empty? ? [] : negatives
+  end
 
   def extract_delimiter(string)
     if string.start_with?('//')
