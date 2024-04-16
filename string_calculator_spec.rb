@@ -47,5 +47,11 @@ RSpec.describe StringCalculator do
         expect(StringCalculator.new.add('2,1001')).to eq(2)
       end
     end
+
+    context 'when given a delimiter of any length' do
+      it 'returns the sum of the numbers using the delimiter' do
+        expect(StringCalculator.new.add("//[***]\n1***2***3")).to eq(6)
+      end
+    end
   end
 end
