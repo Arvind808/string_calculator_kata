@@ -9,5 +9,12 @@ RSpec.describe StringCalculator do
         expect(string.add("")).to eq(0)
       end
     end
+
+    context 'when given a single number' do
+      it 'returns the number' do
+        calculator = StringCalculator.new
+        expect(calculator.add('1')).to eq(1)
+      end
+    end
   end
 end
