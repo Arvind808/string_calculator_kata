@@ -8,28 +8,25 @@ class StringCalculator
 
     delimiter = extract_delimiter(string)
     numbers = extract_numbers(string, delimiter)
-    numbers.map(&:to_i).inject(:+)
+    sanitized_numbers = sanitize_numbers(numbers)
+    sanitized_numbers.inject(:+)
   end
 
   private
 
   def find_negatives(string)
-    negatives = string.scan(/-\d+/)
-    negatives.empty? ? [] : negatives
+    string.scan(/-\d+/)
   end
 
   def extract_delimiter(string)
-    if string.start_with?('//')
-      string[2]
-    else
-      ','
-    end
+    string.start_with?('//') ? string[2] : ','
   end
 
   def extract_numbers(string, delimiter)
-    if string.start_with?('//')
-      string = string.split('\n', 2)[1]
-    end
-    string.split(/#{Regexp.escape(delimiter)}|\n/)
+    string.start_with?('//') ? string.split('\n', 2)[1].split(/#{Regexp.escape(delimiter)}|\n/) : string.split(/#{Regexp.escape(delimiter)}|\n/)
+  end
+
+  def sanitize_numbers(numbers)
+    numbers.map(&:to_i).reject { |num| num > 1000 }
   end
 end
